@@ -1,16 +1,15 @@
 {
   "name": "password-builder",
   "version": "1.0.0",
-  "description": "Lightweight password hashing class using native node crypto module",
+  "description": "Lightweight password hashing tool using native node crypto module",
   "main": "./source/index.js",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
     "build": "tsc",
-    "run": "node ./source/run.js",
     "ci:test": "node --test ./source/test.js",
-    "ci:audit": "npm audit --audit-level=high"
+    "ci:audit": "npm audit --audit-level=low"
   },
   "keywords": [],
   "repository": {
@@ -18,7 +17,7 @@
     "url": "https://github.com/aronep6/password-builder.git"
   },
   "author": {
-    "name": "@aronep6",
+    "name": "aronep6",
     "url": "https://caze.ousmanedev.fr"
   },
   "license": "ISC",

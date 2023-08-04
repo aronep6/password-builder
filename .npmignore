@@ -1,2 +1,4 @@
-/lib
-/.github/workflows
+*
+!source/**/*
+!package.json
+!README.md
