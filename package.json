@@ -9,9 +9,8 @@
   "scripts": {
     "build": "tsc",
     "run": "node ./source/run.js",
-    "dev": "nodemon ./source/run.js",
-    "tswatch": "tsc --watch",
-    "test": "node --test ./source/test.js"
+    "ci:test": "node --test ./source/test.js",
+    "ci:audit": "npm audit --audit-level=critical"
   },
   "keywords": [],
   "author": {

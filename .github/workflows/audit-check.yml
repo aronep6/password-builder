@@ -1,0 +1,22 @@
+# Author: @aronep6
+
+name: (Check) Check for test package vulnerabilities
+"on":
+  push:
+    branches:
+      - master
+jobs:
+  audit-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies and check for vulnerabilities
+        run: npm ci && npm run ci:audit
