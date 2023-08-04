@@ -162,3 +162,46 @@ test("PasswordBuilder.verify()", async (t) => {
     }
   );
 });
+
+test("PasswordBuilder.generateSalt()", async (t) => {
+  await t.test(
+    "PasswordBuilder.generateSalt() should return a string salt",
+    async (t) => {
+      const salt = PasswordBuilder.generateSalt();
+
+      assert.strictEqual(typeof salt, "string");
+    }
+  );
+
+  await t.test(
+    "PasswordBuilder.generateSalt() should throw an error if rounds is not a number",
+    async (t) => {
+      try {
+        const rounds = "rounds" as unknown as number;
+
+        PasswordBuilder.generateSalt(rounds);
+      } catch (error: unknown) {
+        assert.strictEqual(
+          (error as Error).message,
+          "rounds param must be a number"
+        );
+      }
+    }
+  );
+
+  await t.test(
+    "PasswordBuilder.generateSalt() should throw an error if rounds is less than 0",
+    async (t) => {
+      try {
+        const rounds = -1;
+
+        PasswordBuilder.generateSalt(rounds);
+      } catch (error: unknown) {
+        assert.strictEqual(
+          (error as Error).message,
+          "rounds param must be greater than 0"
+        );
+      }
+    }
+  );
+});
