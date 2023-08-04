@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "ES2020",
     "module": "commonjs",
+    "moduleResolution": "Node",
     "rootDir": "./lib",
     "declaration": true,
     "outDir": "./source",
@@ -11,6 +12,6 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   }
 }
