@@ -7,6 +7,8 @@ interface CommonPasswordConfiguration {
 declare class PasswordBuilder {
     private static hashAlgorithm;
     private static hashDigest;
+    private static defaultSaltRounds;
+    static generateSalt: (rounds?: number) => string;
     private static hasher;
     static hash: (password: string, salt: string, configuration?: CommonPasswordConfiguration) => string;
     static verify: (password: string, hashedPassword: string, configuration?: CommonPasswordConfiguration) => boolean;

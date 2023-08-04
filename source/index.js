@@ -7,6 +7,20 @@ class PasswordBuilder {
 _a = PasswordBuilder;
 PasswordBuilder.hashAlgorithm = "sha512";
 PasswordBuilder.hashDigest = "hex";
+PasswordBuilder.defaultSaltRounds = 11;
+PasswordBuilder.generateSalt = (rounds = _a.defaultSaltRounds) => {
+    if (typeof rounds !== "number") {
+        throw new Error("rounds param must be a number");
+    }
+    if (rounds < 0) {
+        throw new Error("rounds param must be greater than 0");
+    }
+    if (rounds > 13) {
+        console.warn("[PasswordBuilder]: Consider setting rounds param to 13 or lower for production, as this may cause high CPU usage.");
+    }
+    const salt = (0, node_crypto_1.randomBytes)(Math.ceil(rounds / 2)).toString("hex");
+    return salt.slice(0, rounds);
+};
 PasswordBuilder.hasher = (password, salt, configuration) => {
     if (configuration) {
         if (configuration.hashAlgorithm) {
