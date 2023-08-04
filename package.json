@@ -1,0 +1,26 @@
+{
+  "name": "passwordbuilder",
+  "version": "1.0.0",
+  "description": "Lightweight password hashing class using native node crypto module",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "tsc",
+    "run": "node ./source/run.js",
+    "dev": "nodemon ./source/run.js",
+    "tswatch": "tsc --watch",
+    "test": "node --test ./source/test.js"
+  },
+  "keywords": [],
+  "author": {
+    "name": "@aronep6",
+    "url": "https://caze.ousmanedev.fr"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.4.7",
+    "typescript": "^5.1.6"
+  }
+}
