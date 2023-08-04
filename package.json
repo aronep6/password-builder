@@ -1,6 +1,6 @@
 {
   "name": "password-builder",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Lightweight password hashing tool using native node crypto module",
   "main": "./source/index.js",
   "directories": {
