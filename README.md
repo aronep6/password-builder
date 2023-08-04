@@ -36,7 +36,20 @@ const hashedPassword = PasswordBuilder.hash(password, salt);
 console.log(hashedPassword); // Output: 'a-random-salt-value.7ef0dab7e6a6...'
 ```
 
-You can also pass an optional configuration object to specify the hashing algorithm and the output encoding:
+#### Generating a random salt value
+
+You can also create a random salt value using the `generateSalt` method:
+
+```javascript
+const password = "mySecurePassword";
+const salt = PasswordBuilder.generateSalt();
+
+const hashedPassword = PasswordBuilder.hash(password, salt);
+```
+
+This way is more secure than using a static salt value. We recommend using a random salt value for each password to enhance security.
+
+You can also pass an optional configuration object to specify the hashing algorithm and the output encoding, to override the default values (SHA-512 for the hashing algorithm and hexadecimal for the output encoding).
 
 ```javascript
 const configuration = {
@@ -45,7 +58,7 @@ const configuration = {
 };
 
 const hashedPassword = PasswordBuilder.hash(password, salt, configuration);
-console.log(hashedPassword); // Output: 'a-random-salt-value+fu2tdtrRv...'
+console.log(hashedPassword); // Output: 'a-random-salt-value.u2tdtrRv...'
 ```
 
 ### Verifying a password
