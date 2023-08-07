@@ -1,22 +1,32 @@
 # Author: @aronep6
 
-name: (Tests) Run feature tests
+name: (Tests) Run feature tests on multiple Node.js versions
 "on":
   push:
     branches:
       - master
 jobs:
-  audit-check:
+  feat-tests:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js v(${{ matrix.node-version }})
         uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies and test features
-        run: npm ci && npm run ci:test
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile TypeScript for testing features
+        run: npm run ci:test:build
+
+      - name: Run feature tests on Node.js v(${{ matrix.node-version }})
+        run: npm run ci:test:run

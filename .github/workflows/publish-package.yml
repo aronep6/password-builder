@@ -16,10 +16,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           registry-url: "https://registry.npmjs.org"
-          node-version: "18"
+          node-version: "20"
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Compile TypeScript for publishing package
+        run: npm run ci:pckg:build
 
       - name: Publish the package
         run: npm publish
