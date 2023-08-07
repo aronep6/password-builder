@@ -1,17 +1,11 @@
+import type {
+  Hash,
+  BinaryToTextEncoding,
+  HashAlgorithm,
+  CommonPasswordConfiguration,
+} from "./interfaces";
+
 import { createHmac, randomBytes } from "node:crypto";
-
-interface Hash {
-  salt: string;
-  hashedPassword: string;
-}
-
-type BinaryToTextEncoding = "base64" | "base64url" | "hex" | "binary";
-type HashAlgorithm = "sha256" | "sha512";
-
-interface CommonPasswordConfiguration {
-  hashAlgorithm?: HashAlgorithm;
-  hashDigest?: BinaryToTextEncoding;
-}
 
 class PasswordBuilder {
   private static hashAlgorithm: HashAlgorithm = "sha512";
