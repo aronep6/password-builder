@@ -5,6 +5,7 @@ name: (Tests) Run feature tests on multiple Node.js versions
   push:
     branches:
       - master
+      - dev/master
 jobs:
   feat-tests:
     runs-on: ubuntu-latest

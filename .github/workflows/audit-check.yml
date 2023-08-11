@@ -5,6 +5,7 @@ name: (Check) Check for test package vulnerabilities
   push:
     branches:
       - master
+      - dev/master
 jobs:
   audit-check:
     runs-on: ubuntu-latest
