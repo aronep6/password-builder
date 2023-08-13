@@ -61,6 +61,16 @@ const hashedPassword = PasswordBuilder.hash(password, salt, configuration);
 console.log(hashedPassword); // Output: 'a-random-salt-value.u2tdtrRv...'
 ```
 
+### Custom salt hash separator
+
+By default, the salt and the hashed password are separated by a dot (`.`). You can change this separator by passing a custom separator to the `hash` method, with the `inSeparator` property of the configuration object:
+
+```javascript
+const hashedPassword = PasswordBuilder.hash(password, salt, {
+  inSeparator: "-",
+});
+```
+
 ### Verifying a password
 
 The `verify` method is used to verify a password against a hashed password. It returns `true` if the password matches the hash, and `false` otherwise.
