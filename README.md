@@ -1,4 +1,4 @@
-# PasswordBuilder Tool
+# PasswordBuilder Tool for Node.js
 
 The PasswordBuilder library is a simple utility for securely hashing and verifying passwords using cryptographic hashing algorithms. It provides a way to hash passwords with a user-provided salt and verify passwords against hashed values. This library is intended to be used in Node.js applications and relies on the `node:crypto` module for cryptographic operations.
 
