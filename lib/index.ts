@@ -1,15 +1,12 @@
 import type {
   Hash,
-  BinaryToTextEncoding,
-  HashAlgorithm,
   CommonPasswordConfiguration,
+  SafePasswordConfiguration,
 } from "./interfaces";
-
 import { createHmac, randomBytes } from "node:crypto";
+import safeCommonPasswordConfigurationAdapter from "./adapter/safe-password-configuration.adapter";
 
 class PasswordBuilder {
-  private static hashAlgorithm: HashAlgorithm = "sha512";
-  private static hashDigest: BinaryToTextEncoding = "hex";
   private static defaultSaltRounds = 11;
 
   public static generateSalt = (
@@ -37,30 +34,21 @@ class PasswordBuilder {
   private static hasher = (
     password: string,
     salt: string,
-    configuration?: CommonPasswordConfiguration
+    conf: SafePasswordConfiguration
   ): Pick<Hash, "hashedPassword"> => {
-    if (configuration) {
-      if (configuration.hashAlgorithm) {
-        this.hashAlgorithm = configuration.hashAlgorithm;
-      }
-      if (configuration.hashDigest) {
-        this.hashDigest = configuration.hashDigest;
-      }
-    }
-
-    const hash = createHmac(this.hashAlgorithm, salt);
+    const hash = createHmac(conf.hashAlgorithm, salt);
     hash.update(password);
-    const value = hash.digest(this.hashDigest);
+    const value = hash.digest(conf.hashDigest);
 
     return {
-      hashedPassword: `${salt}.${value}`,
+      hashedPassword: `${salt}${conf.inSeparator}${value}`,
     };
   };
 
   public static hash = (
     password: string,
     salt: string,
-    configuration?: CommonPasswordConfiguration
+    configuration?: CommonPasswordConfiguration | SafePasswordConfiguration
   ): string => {
     if (password == null || salt == null) {
       throw new Error("Must Provide Password and salt values");
@@ -70,7 +58,10 @@ class PasswordBuilder {
         "password must be a string and salt must either be a salt string or a number of rounds"
       );
     }
-    return this.hasher(password, salt, configuration).hashedPassword;
+
+    const conf = safeCommonPasswordConfigurationAdapter(configuration);
+
+    return this.hasher(password, salt, conf).hashedPassword;
   };
 
   public static verify = (
@@ -82,7 +73,9 @@ class PasswordBuilder {
       throw new Error("Must Provide hashedPassword");
     }
 
-    const subPass = hashedPassword.split(".");
+    const conf = safeCommonPasswordConfigurationAdapter(configuration);
+
+    const subPass = hashedPassword.split(conf.inSeparator);
 
     const passwordHashConfiguration: Hash = {
       salt: subPass[0],
@@ -98,17 +91,17 @@ class PasswordBuilder {
       );
     }
 
-    const hash = this.hash(
+    const hash = this.hasher(
       password,
       passwordHashConfiguration.salt,
-      configuration
-    );
+      conf
+    ).hashedPassword;
 
     if (password == null || hash == null) {
       throw new Error("password and hash is required to compare");
     }
 
-    if (hash === hashedPassword) {
+    if (hash === hashedPassword && password.length > 0 && hash.length > 0) {
       return true;
     }
     return false;
