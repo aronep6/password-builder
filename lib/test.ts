@@ -44,6 +44,25 @@ test("PasswordBuilder.hash()", async (t) => {
   );
 
   await t.test(
+    "PasswordBuilder.hash() should return a string hashed password, with a specific salt hash separator",
+    async (t) => {
+      const password = "password_123";
+      const salt = "spidermanvsbatman";
+      const saltHashSeparator = "||";
+
+      const expectedHash = `${salt}${saltHashSeparator}RWbTOAtwP9e55sp0U+3/U7auSjjGAHqK7q0uk77Swbk=`;
+
+      const hashedPassword = PasswordBuilder.hash(password, salt, {
+        hashAlgorithm: "sha256",
+        hashDigest: "base64",
+        inSeparator: saltHashSeparator,
+      });
+
+      assert.strictEqual(hashedPassword, expectedHash);
+    }
+  );
+
+  await t.test(
     "PasswordBuilder.hash() should throw an error if password is null",
     async (t) => {
       try {
