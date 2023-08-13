@@ -1,8 +1,0 @@
-{
-  "extends": "./tsconfig.base.json",
-  "files": [
-    "./lib/index.ts",
-    "./lib/playground.ts",
-    "./lib/interfaces.ts",
-  ]
-}

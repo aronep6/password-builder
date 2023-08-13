@@ -2,6 +2,12 @@ import test from "node:test";
 import assert from "node:assert";
 
 import PasswordBuilder from ".";
+import isAllowedValue from "./utils/is-allowed-value.util";
+import safePasswordConfigurationAdapter from "./adapter/safe-password-configuration.adapter";
+import { CommonPasswordConfiguration } from "./interfaces";
+import defaultPasswordConfiguration from "./default-password.config";
+
+import { PSBErrors } from "./enum/Errors.enum";
 
 test("PasswordBuilder.hash()", async (t) => {
   await t.test(
@@ -29,7 +35,7 @@ test("PasswordBuilder.hash()", async (t) => {
       const salt = "B5huQROTsAubI0Foe3";
 
       const expectedHash =
-        "B5huQROTsAubI0Foe3.C63xQ1CIqI7k5J80I2FW8yd+22erTSBZ0CFHvFWGHug=";
+        "B5huQROTsAubI0Foe3.86e54b7687254f3a9d3413d3254dbd995d8ca71cc6679c4e592bf55f653c76897154ea9763e7b5c74d55dec560a528c88b60c2a2985b9ad8130bfd53a89acb5b";
 
       const hashedPassword = PasswordBuilder.hash(password, salt);
 
@@ -156,7 +162,7 @@ test("PasswordBuilder.verify()", async (t) => {
         console.log("error", error);
         assert.strictEqual(
           (error as Error).message,
-          "password must be a String and hash must be an Object of { salt, hashedPassword }"
+          PSBErrors.ConfigurationMustBeAnObjectOrUndefined
         );
       }
     }
@@ -202,6 +208,143 @@ test("PasswordBuilder.generateSalt()", async (t) => {
           "rounds param must be greater than 0"
         );
       }
+    }
+  );
+});
+
+test("PasswordBuilder : Utilities & Adapters", async (t) => {
+  await t.test(
+    "Utils isAllowedValue : Should return true if value is present in the array",
+    async (t) => {
+      const value = "value2";
+
+      const allowedValues = ["value0", "feuneu", "value2", "gazo", "zed"];
+
+      const isAllowed = isAllowedValue(value, allowedValues);
+
+      assert.strictEqual(isAllowed, true);
+    }
+  );
+
+  await t.test(
+    "Utils isAllowedValue : Should return false if value is not present in the array",
+    async (t) => {
+      const value = "normalement_impossible_a_trouver";
+
+      const allowedValues = ["ou", "pas", "du", "tout", "on", "sait", "jamais"];
+
+      const isAllowed = isAllowedValue(value, allowedValues);
+
+      assert.strictEqual(isAllowed, false);
+    }
+  );
+
+  await t.test(
+    "Adapters safePasswordConfigurationAdapter : Should return a valid configuration object",
+    async (t) => {
+      const configuration: CommonPasswordConfiguration = {
+        hashAlgorithm: "sha256",
+        hashDigest: "base64url",
+        inSeparator: "!",
+      };
+
+      const adaptedConfiguration =
+        safePasswordConfigurationAdapter(configuration);
+
+      assert.strictEqual(adaptedConfiguration.hashAlgorithm, "sha256");
+      assert.strictEqual(adaptedConfiguration.hashDigest, "base64url");
+      assert.strictEqual(adaptedConfiguration.inSeparator, "!");
+    }
+  );
+
+  await t.test(
+    "Adapters safePasswordConfigurationAdapter : Should return a valid configuration object if configuration is equal to the default configuration",
+    async (t) => {
+      const adaptedConfiguration = safePasswordConfigurationAdapter(
+        defaultPasswordConfiguration
+      );
+
+      assert.strictEqual(
+        adaptedConfiguration.hashAlgorithm,
+        defaultPasswordConfiguration.hashAlgorithm
+      );
+      assert.strictEqual(
+        adaptedConfiguration.hashDigest,
+        defaultPasswordConfiguration.hashDigest
+      );
+      assert.strictEqual(
+        adaptedConfiguration.inSeparator,
+        defaultPasswordConfiguration.inSeparator
+      );
+    }
+  );
+
+  await t.test(
+    "Adapters safePasswordConfigurationAdapter : Should return a valid configuration object and strictly equal to the default configuration",
+    async (t) => {
+      const configuration = undefined;
+
+      const adaptedConfiguration =
+        safePasswordConfigurationAdapter(configuration);
+
+      assert.strictEqual(adaptedConfiguration, defaultPasswordConfiguration);
+    }
+  );
+
+  await t.test(
+    "Adapters safePasswordConfigurationAdapter : Should return a valid configuration object and strictly equal to the default configuration",
+    async (t) => {
+      const configuration = undefined;
+
+      const adaptedConfiguration =
+        safePasswordConfigurationAdapter(configuration);
+
+      assert.strictEqual(adaptedConfiguration, defaultPasswordConfiguration);
+    }
+  );
+
+  await t.test(
+    "Adapters safePasswordConfigurationAdapter : Should return an error if the configuration is not an object.",
+    async (t) => {
+      try {
+        const configuration = [] as unknown as CommonPasswordConfiguration;
+
+        console.log("typeof configuration", typeof configuration);
+
+        safePasswordConfigurationAdapter(configuration);
+      } catch (error: unknown) {
+        assert.strictEqual(
+          (error as Error).message,
+          PSBErrors.ConfigurationMustBeAnObjectOrUndefined
+        );
+      }
+    }
+  );
+
+  await t.test(
+    "Adapters safePasswordConfigurationAdapter : Should return a valid configuration object and strictly equal to the default configuration, if the configuration values are not allowed.",
+    async (t) => {
+      const configuration = {
+        hashAlgorithm: "_unknown_hash_algorithm_",
+        hashDigest: "_unknown_hash_digest_",
+        inSeparator: [999], // Invalid separator (only string are allowed)
+      } as unknown as CommonPasswordConfiguration;
+
+      const adaptedConfiguration =
+        safePasswordConfigurationAdapter(configuration);
+
+      assert.strictEqual(
+        adaptedConfiguration.hashAlgorithm,
+        defaultPasswordConfiguration.hashAlgorithm
+      );
+      assert.strictEqual(
+        adaptedConfiguration.hashDigest,
+        defaultPasswordConfiguration.hashDigest
+      );
+      assert.strictEqual(
+        adaptedConfiguration.inSeparator,
+        defaultPasswordConfiguration.inSeparator
+      );
     }
   );
 });
