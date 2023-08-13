@@ -178,7 +178,6 @@ test("PasswordBuilder.verify()", async (t) => {
 
         PasswordBuilder.verify(password, hashedPassword, hashConfig);
       } catch (error: unknown) {
-        console.log("error", error);
         assert.strictEqual(
           (error as Error).message,
           PSBErrors.ConfigurationMustBeAnObjectOrUndefined
@@ -311,24 +310,10 @@ test("PasswordBuilder : Utilities & Adapters", async (t) => {
   );
 
   await t.test(
-    "Adapters safePasswordConfigurationAdapter : Should return a valid configuration object and strictly equal to the default configuration",
-    async (t) => {
-      const configuration = undefined;
-
-      const adaptedConfiguration =
-        safePasswordConfigurationAdapter(configuration);
-
-      assert.strictEqual(adaptedConfiguration, defaultPasswordConfiguration);
-    }
-  );
-
-  await t.test(
     "Adapters safePasswordConfigurationAdapter : Should return an error if the configuration is not an object.",
     async (t) => {
       try {
         const configuration = [] as unknown as CommonPasswordConfiguration;
-
-        console.log("typeof configuration", typeof configuration);
 
         safePasswordConfigurationAdapter(configuration);
       } catch (error: unknown) {

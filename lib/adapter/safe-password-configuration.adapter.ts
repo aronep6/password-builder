@@ -46,10 +46,6 @@ const safePasswordConfigurationAdapter = (
     allowedHashDigests
   );
 
-  console.log(
-    `hashAlgorithmIsValid: ${hashAlgorithmIsValid}, hashDigestIsValid: ${hashDigestIsValid}`
-  );
-
   const inSeparatorValue =
     configuration.inSeparator && typeof configuration.inSeparator === "string"
       ? configuration.inSeparator
