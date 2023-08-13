@@ -9,4 +9,11 @@ export type HashAlgorithm = "sha256" | "sha512";
 export interface CommonPasswordConfiguration {
   hashAlgorithm?: HashAlgorithm;
   hashDigest?: BinaryToTextEncoding;
+  inSeparator?: string;
+}
+
+export interface SafePasswordConfiguration {
+  hashAlgorithm: HashAlgorithm;
+  hashDigest: BinaryToTextEncoding;
+  inSeparator: string;
 }
