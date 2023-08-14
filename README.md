@@ -1,5 +1,11 @@
 # PasswordBuilder Tool for Node.js
 
+[![tests](https://github.com/aronep6/password-builder/actions/workflows/feat-tests.yml/badge.svg)](https://github.com/aronep6/password-builder/actions/workflows/feat-tests.yml)
+
+[![audit](https://github.com/aronep6/password-builder/actions/workflows/audit-check.yml/badge.svg)](https://github.com/aronep6/password-builder/actions/workflows/audit-check.yml)
+
+[![pckg-publish](https://github.com/aronep6/password-builder/actions/workflows/publish-package.yml/badge.svg)](https://github.com/aronep6/password-builder/actions/workflows/publish-package.yml)
+
 The PasswordBuilder library is a simple utility for securely hashing and verifying passwords using cryptographic hashing algorithms. It provides a way to hash passwords with a user-provided salt and verify passwords against hashed values. This library is intended to be used in Node.js applications and relies on the `node:crypto` module for cryptographic operations.
 
 ## Installation
@@ -95,6 +101,83 @@ const isMatch = PasswordBuilder.verify(password, hashedPassword, configuration);
 console.log(isMatch); // Output: true
 ```
 
+## Hash & Verify configuration
+
+The `PasswordBuilder` class accepts an optional configuration object to specify the hashing algorithm and the output encoding. The configuration object has the following properties:
+
+- `hashAlgorithm`: The hashing algorithm to use. The default value is `sha512`. The supported values are `sha256` and `sha512`.
+
+- `hashDigest`: The output encoding to use. The default value is `hex`. The supported values are `base64`, `base64url`, `hex`, and `binary`.
+
+- `inSeparator`: The separator to use between the salt and the hashed password. The default value is `.`.
+
+## API
+
+### PasswordBuilder.hash(password, salt, [configuration])
+
+Hashes a given password with a provided salt and returns the hashed password as a string.
+
+#### Parameters
+
+- `password`: The password to hash.
+- `salt`: The salt value to use for hashing.
+- `configuration`: An optional configuration object to specify the hashing algorithm and the output encoding. The default values are `sha512` for the hashing algorithm and `hex` for the output encoding.
+
+#### Returns
+
+The hashed password as a string.
+
+### PasswordBuilder.verify(password, hashedPassword, [configuration])
+
+Verifies a password against a hashed password and returns `true` if the password matches the hash, and `false` otherwise.
+
+#### Parameters
+
+- `password`: The password to verify.
+- `hashedPassword`: The hashed password to verify against.
+- `configuration`: An optional configuration object to specify the hashing algorithm and the output encoding. The default values are `sha512` for the hashing algorithm and `hex` for the output encoding.
+
+#### Returns
+
+`true` if the password matches the hash, and `false` otherwise.
+
+### PasswordBuilder.generateSalt()
+
+Generates a random salt value and returns it as a string.
+
+#### Returns
+
+The generated salt value as a string.
+
+## Full example
+
+```javascript
+import PasswordBuilder from "password-builder";
+
+const password = "mySecurePassword";
+
+// Generate a random salt value
+const salt = PasswordBuilder.generateSalt();
+
+// Hash the password
+const hashedPassword = PasswordBuilder.hash(password, salt, {
+  hashAlgorithm: "sha512",
+  hashDigest: "hex",
+  inSeparator: "-",
+});
+
+// ... Store the hashed password in the database
+
+// Later ... Verify the password
+const isMatch = PasswordBuilder.verify(password, hashedPassword, {
+  hashAlgorithm: "sha512",
+  hashDigest: "hex",
+  inSeparator: "-",
+});
+
+console.log(isMatch); // Output: true
+```
+
 ## Important Notes
 
 - Always use a secure and unique salt value for each password to enhance security.
@@ -104,4 +187,4 @@ console.log(isMatch); // Output: true
 
 ## License
 
-This library is open-source and distributed under the MIT License. Feel free to contribute to the project or report any issues on the [GitHub repository](https://github.com/aronep6/password-builder).
+This library is open-source and distributed under the [MIT License](https://github.com/aronep6/password-builder/blob/master/LICENCE). Feel free to contribute to the project or report any issues on the [GitHub repository](https://github.com/aronep6/password-builder).
