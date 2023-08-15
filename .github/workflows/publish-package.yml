@@ -16,15 +16,32 @@ jobs:
         uses: actions/setup-node@v3
         with:
           registry-url: "https://registry.npmjs.org"
-          node-version: "20"
+          node-version: "latest"
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup git user informations
+        run: |
+          git config --global user.name "[bot] PasswordBuilder"
+          git config --global user.email "admin@ousmanedev.fr"
+
+      - name: Bump package version to match with the release tag
+        run: "npm version ${{ github.event.release.tag_name }} -m 'chore(package): Bump package version to ${{ github.event.release.tag_name }}'"
+
+      - name: Push the new version to the repository
+        run: git push --follow-tags origin ${{ github.ref }} --no-verify
+
+      - name: Clean cache & install dependencies
+        run: npm cache clean --force && npm ci
 
       - name: Compile TypeScript for publishing package
         run: npm run ci:pckg:build
 
-      - name: Publish the package
-        run: npm publish
+      - name: Clean up package.json for publishing package
+        run: npm run ci:pckg:clean
+
+      - name: Create a tarball of the package
+        run: npm pack
+
+      - name: Publish the package to NPM
+        run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PKG_PUBLISH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PCKG_PUBLISH_TOKEN }}

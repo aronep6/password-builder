@@ -8,7 +8,8 @@
     "ci:audit:run": "npm audit --audit-level=low",
     "ci:pckg:build": "tsc --project ./tsconfig.pckg.json",
     "ci:test:run": "node --test ./dist/test.js",
-    "ci:test:build": "tsc --project ./tsconfig.test.json"
+    "ci:test:build": "tsc --project ./tsconfig.test.json",
+    "ci:pckg:clean": "clean-package"
   },
   "keywords": [
     "password",
@@ -22,13 +23,24 @@
     "type": "git",
     "url": "https://github.com/aronep6/password-builder.git"
   },
+  "engines": {
+    "node": ">=4.x"
+  },
+  "clean-package": {
+    "remove": [
+      "clean-package",
+      "scripts",
+      "devDependencies"
+    ]
+  },
   "author": {
     "name": "aronep6",
     "url": "https://caze.ousmanedev.fr"
   },
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.4.7",
+    "clean-package": "^2.2.0",
     "typescript": "^5.1.6"
   }
 }
