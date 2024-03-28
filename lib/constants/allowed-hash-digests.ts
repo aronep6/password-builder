@@ -1,4 +1,4 @@
-import type { BinaryToTextEncoding } from "../interfaces";
+import type { BinaryToTextEncoding } from "../types";
 
 const allowedHashDigests: BinaryToTextEncoding[] = [
   "base64",

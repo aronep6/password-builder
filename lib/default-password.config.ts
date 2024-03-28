@@ -1,4 +1,4 @@
-import type { SafePasswordConfiguration } from "./interfaces";
+import type { SafePasswordConfiguration } from "./types";
 
 const defaultPasswordConfiguration: SafePasswordConfiguration = {
   hashAlgorithm: "sha512",

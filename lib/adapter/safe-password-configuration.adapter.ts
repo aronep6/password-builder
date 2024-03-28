@@ -1,7 +1,7 @@
 import type {
   CommonPasswordConfiguration,
   SafePasswordConfiguration,
-} from "../interfaces";
+} from "../types";
 
 import allowedHashAlgorithms from "../constants/allowed-hash-algorithms";
 import isAllowedValue from "../utils/is-allowed-value.util";
