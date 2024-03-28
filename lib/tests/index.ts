@@ -1,16 +1,15 @@
 import test from "node:test";
 import assert from "node:assert";
-
-import PasswordBuilder from ".";
-import isAllowedValue from "./utils/is-allowed-value.util";
-import safePasswordConfigurationAdapter from "./adapter/safe-password-configuration.adapter";
-import {
+import { generateSalt, hash, verify } from "../functions";
+import isAllowedValue from "../utils/is-allowed-value.util";
+import safePasswordConfigurationAdapter from "../adapter/safe-password-configuration.adapter";
+import type {
   CommonPasswordConfiguration,
   SafePasswordConfiguration,
-} from "./interfaces";
-import defaultPasswordConfiguration from "./default-password.config";
+} from "../types";
+import defaultPasswordConfiguration from "../default-password.config";
 
-import { PSBErrors } from "./enum/Errors.enum";
+import { PSBErrors } from "../enum/Errors.enum";
 
 test("PasswordBuilder.hash()", async (t) => {
   await t.test(
@@ -22,7 +21,7 @@ test("PasswordBuilder.hash()", async (t) => {
       const expectedHash: string =
         "spidermanvsbatman.RWbTOAtwP9e55sp0U+3/U7auSjjGAHqK7q0uk77Swbk=";
 
-      const hashedPassword: string = PasswordBuilder.hash(password, salt, {
+      const hashedPassword: string = hash(password, salt, {
         hashAlgorithm: "sha256",
         hashDigest: "base64",
       });
@@ -40,7 +39,7 @@ test("PasswordBuilder.hash()", async (t) => {
       const expectedHash: string =
         "B5huQROTsAubI0Foe3.86e54b7687254f3a9d3413d3254dbd995d8ca71cc6679c4e592bf55f653c76897154ea9763e7b5c74d55dec560a528c88b60c2a2985b9ad8130bfd53a89acb5b";
 
-      const hashedPassword: string = PasswordBuilder.hash(password, salt);
+      const hashedPassword: string = hash(password, salt);
 
       assert.strictEqual(hashedPassword, expectedHash);
     }
@@ -55,7 +54,7 @@ test("PasswordBuilder.hash()", async (t) => {
 
       const expectedHash: string = `${salt}${saltHashSeparator}RWbTOAtwP9e55sp0U+3/U7auSjjGAHqK7q0uk77Swbk=`;
 
-      const hashedPassword: string = PasswordBuilder.hash(password, salt, {
+      const hashedPassword: string = hash(password, salt, {
         hashAlgorithm: "sha256",
         hashDigest: "base64",
         inSeparator: saltHashSeparator,
@@ -72,7 +71,7 @@ test("PasswordBuilder.hash()", async (t) => {
         const password = null as unknown as string;
         const salt = null as unknown as string;
 
-        PasswordBuilder.hash(password, salt);
+        hash(password, salt);
       } catch (error: unknown) {
         assert.strictEqual(
           (error as Error).message,
@@ -89,7 +88,7 @@ test("PasswordBuilder.hash()", async (t) => {
         const password = 123 as unknown as string;
         const salt: string = "hello";
 
-        PasswordBuilder.hash(password, salt);
+        hash(password, salt);
       } catch (error: unknown) {
         assert.strictEqual(
           (error as Error).message,
@@ -106,7 +105,7 @@ test("PasswordBuilder.hash()", async (t) => {
         const password: string = "hello";
         const salt = 123 as unknown as string;
 
-        PasswordBuilder.hash(password, salt);
+        hash(password, salt);
       } catch (error: unknown) {
         assert.strictEqual(
           (error as Error).message,
@@ -126,7 +125,7 @@ test("PasswordBuilder.verify()", async (t) => {
       const expectedHash =
         "gothamcity.74feb8fa77b7651d3aca2abc075c60d55d5d7f8b053d1b06dc5fc725cf4651acf7ce8adcf2fb392deb4554c967af15e54294892926aed5fed6a2ab5bec66419d";
 
-      const isPasswordValid = PasswordBuilder.verify(password, expectedHash, {
+      const isPasswordValid = verify(password, expectedHash, {
         hashAlgorithm: "sha512",
         hashDigest: "hex",
       });
@@ -142,7 +141,7 @@ test("PasswordBuilder.verify()", async (t) => {
 
       const expectedHash: string = "invalid_hash_value";
 
-      const isPasswordValid = PasswordBuilder.verify(password, expectedHash, {
+      const isPasswordValid = verify(password, expectedHash, {
         hashAlgorithm: "sha512",
         hashDigest: "hex",
       });
@@ -159,7 +158,7 @@ test("PasswordBuilder.verify()", async (t) => {
 
         const hashedPassword = null as unknown as string;
 
-        PasswordBuilder.verify(password, hashedPassword);
+        verify(password, hashedPassword);
       } catch (error: unknown) {
         assert.strictEqual(
           (error as Error).message,
@@ -179,7 +178,7 @@ test("PasswordBuilder.verify()", async (t) => {
 
         const hashConfig = "hashConfig" as unknown as {};
 
-        PasswordBuilder.verify(password, hashedPassword, hashConfig);
+        verify(password, hashedPassword, hashConfig);
       } catch (error: unknown) {
         assert.strictEqual(
           (error as Error).message,
@@ -194,7 +193,7 @@ test("PasswordBuilder.generateSalt()", async (t) => {
   await t.test(
     "PasswordBuilder.generateSalt() should return a string salt",
     async (t) => {
-      const salt: string = PasswordBuilder.generateSalt();
+      const salt: string = generateSalt();
 
       assert.strictEqual(typeof salt, "string");
     }
@@ -206,7 +205,7 @@ test("PasswordBuilder.generateSalt()", async (t) => {
       try {
         const rounds = "rounds" as unknown as number;
 
-        PasswordBuilder.generateSalt(rounds);
+        generateSalt(rounds);
       } catch (error: unknown) {
         assert.strictEqual(
           (error as Error).message,
@@ -222,7 +221,7 @@ test("PasswordBuilder.generateSalt()", async (t) => {
       try {
         const rounds: number = -1;
 
-        PasswordBuilder.generateSalt(rounds);
+        generateSalt(rounds);
       } catch (error: unknown) {
         assert.strictEqual(
           (error as Error).message,
