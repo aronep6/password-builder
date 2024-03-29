@@ -30,6 +30,12 @@ To use PasswordBuilder, you need to import it and use the provided methods for h
 import PasswordBuilder from "password-builder";
 ```
 
+or get only the methods you need
+
+```javascript
+import { hash, verify, generateSalt } from "password-builder";
+```
+
 ### Hashing a password
 
 The `hash` method is used to hash a given password with a provided salt. It returns the hashed password as a string.
@@ -39,6 +45,9 @@ const password = "mySecurePassword";
 const salt = "a-random-salt-value";
 
 const hashedPassword = PasswordBuilder.hash(password, salt);
+// or
+const hashedPassword = hash(password, salt);
+
 console.log(hashedPassword); // Output: 'a-random-salt-value.7ef0dab7e6a6...'
 ```
 
@@ -48,7 +57,10 @@ You can also create a random salt value using the `generateSalt` method:
 
 ```javascript
 const password = "mySecurePassword";
+
 const salt = PasswordBuilder.generateSalt();
+// or
+const salt = generateSalt();
 
 const hashedPassword = PasswordBuilder.hash(password, salt);
 ```
@@ -64,6 +76,9 @@ const configuration = {
 };
 
 const hashedPassword = PasswordBuilder.hash(password, salt, configuration);
+// or
+const hashedPassword = hash(password, salt, configuration);
+
 console.log(hashedPassword); // Output: 'a-random-salt-value.u2tdtrRv...'
 ```
 
@@ -86,6 +101,9 @@ const password = "mySecurePassword";
 const hashedPassword = "a-random-salt-value.7ef0dab7e6a6...";
 
 const isMatch = PasswordBuilder.verify(password, hashedPassword);
+// or
+const isMatch = verify(password, hashedPassword);
+
 console.log(isMatch); // Output: true
 ```
 
@@ -98,6 +116,9 @@ const configuration = {
 };
 
 const isMatch = PasswordBuilder.verify(password, hashedPassword, configuration);
+// or
+const isMatch = verify(password, hashedPassword, configuration);
+
 console.log(isMatch); // Output: true
 ```
 
@@ -152,15 +173,15 @@ The generated salt value as a string.
 ## Full example
 
 ```javascript
-import PasswordBuilder from "password-builder";
+import { generateSalt, hash, verify } from "password-builder";
 
 const password = "mySecurePassword";
 
 // Generate a random salt value
-const salt = PasswordBuilder.generateSalt();
+const salt = generateSalt();
 
 // Hash the password
-const hashedPassword = PasswordBuilder.hash(password, salt, {
+const hashedPassword = hash(password, salt, {
   hashAlgorithm: "sha512",
   hashDigest: "hex",
   inSeparator: "-",
@@ -169,7 +190,7 @@ const hashedPassword = PasswordBuilder.hash(password, salt, {
 // ... Store the hashed password in the database
 
 // Later ... Verify the password
-const isMatch = PasswordBuilder.verify(password, hashedPassword, {
+const isMatch = verify(password, hashedPassword, {
   hashAlgorithm: "sha512",
   hashDigest: "hex",
   inSeparator: "-",
