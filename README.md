@@ -4,8 +4,6 @@
 
 [![audit](https://github.com/aronep6/password-builder/actions/workflows/audit-check.yml/badge.svg)](https://github.com/aronep6/password-builder/actions/workflows/audit-check.yml)
 
-[![pckg-publish](https://github.com/aronep6/password-builder/actions/workflows/publish-package.yml/badge.svg)](https://github.com/aronep6/password-builder/actions/workflows/publish-package.yml)
-
 The PasswordBuilder library is a simple utility for securely hashing and verifying passwords using cryptographic hashing algorithms. It provides a way to hash passwords with a user-provided salt and verify passwords against hashed values. This library is intended to be used in Node.js applications and relies on the `node:crypto` module for cryptographic operations.
 
 ## Installation
