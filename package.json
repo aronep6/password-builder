@@ -3,12 +3,13 @@
   "version": "3.1.0",
   "description": "Lightweight password hashing tool using native node crypto module",
   "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
     "ci:audit:run": "npm audit --audit-level=low",
-    "ci:pckg:build": "tsc --project ./tsconfig.pckg.json",
-    "ci:test:run": "node --test ./dist/test.js",
-    "ci:test:build": "tsc --project ./tsconfig.test.json",
+    "ci:pckg:build": "tsup",
+    "ci:test:build": "tsc --project ./tsconfig.tests.json",
+    "ci:test:run": "node --test ./tests-build/tests/index.js",
     "ci:pckg:clean": "clean-package"
   },
   "keywords": [
@@ -35,12 +36,13 @@
   },
   "author": {
     "name": "aronep6",
-    "url": "https://caze.ousmanedev.fr"
+    "url": "https://purpuly.com"
   },
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.4.7",
     "clean-package": "^2.2.0",
+    "tsup": "^8.0.2",
     "typescript": "^5.1.6"
   }
 }

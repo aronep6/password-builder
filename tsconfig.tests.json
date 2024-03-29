@@ -3,14 +3,16 @@
     "target": "ES2020",
     "module": "commonjs",
     "moduleResolution": "Node",
-    "outDir": "./dist",
-    "declaration": true,
+    "outDir": "tests-build",
     "removeComments": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "skipLibCheck": true,
-  }
+  },
+  "files": [
+    "./lib/index.ts",
+    "./lib/tests/index.ts",
+  ]
 }

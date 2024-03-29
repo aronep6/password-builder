@@ -1,7 +1,19 @@
 {
-  "extends": "./tsconfig.base.json",
-  "files": [
-    "./lib/index.ts",
-    "./lib/interfaces.ts",
-  ]
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "declaration": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+  },
+  "include": ["lib"],
+  "exclude": ["node_modules", "dist"]
 }
