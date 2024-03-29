@@ -1,6 +1,6 @@
 {
   "name": "password-builder",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Lightweight password hashing tool using native node crypto module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/aronep6/password-builder.git"
+    "url": "git+https://github.com/aronep6/password-builder.git"
   },
   "engines": {
     "node": ">=4.x"
