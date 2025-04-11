@@ -21,7 +21,7 @@ jobs:
       - name: Setup git user informations
         run: |
           git config --global user.name "[bot] PasswordBuilder"
-          git config --global user.email "admin@ousmanedev.fr"
+          git config --global user.email "u.dont.need@my.email.right.fr"
 
       - name: Bump package version to match with the release tag
         run: "npm version ${{ github.event.release.tag_name }} -m 'chore(package): Bump package version to ${{ github.event.release.tag_name }}'"
